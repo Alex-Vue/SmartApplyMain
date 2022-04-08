@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Smart Apply</title>
+
+  </head>
+  <body>
+    <div class="topnav">
+      
+      <button onclick style="float: right">
+        <a href="/log-out">
+          Log out
+        </a>
+      </button>
+      <button onclick style="float: right">
+        <a href="/user-profile">{{ user }}</a>
+      </button>
+      <button>
+        <a href="/cal">
+          Calendar
+        </a>
+      </button>
+      <button onclick>
+        <a href="/important-files">
+          Important Files 
+        </a>
+      </button>
+      <button onclick>
+        <a href="/process-of-applications">
+          Process of Applications
+        </a>
+      </button>
+    </div>
+
+<link rel="stylesheet" href="{% static 'css/calendar/calendar.css' %}">
+<div class="calendar">
+    <div class="calendar_header">
+        <div class="calendar_nav">
+            <button class="nav-btn go-prev">&lt;</button>
+            <span class="year"></span>/
+            <span class="month"></span>
+            <!-- <button class="nav-btn go-today">오늘로 가기</button> -->
+            <button class="nav-btn go-next">&gt;</button>
+        </div>
+    </div>
+    <div class="calendar_main">
+        <div class="days">
+            <div class="day">Sun</div>
+            <div class="day">Mon</div>
+            <div class="day">Tue</div>
+            <div class="day">Wed</div>
+            <div class="day">Thu</div>
+            <div class="day">Fri</div>
+            <div class="day">Sat</div>
+        </div>
+        <div class="dates"></div>
+    </div>
+
+    <!-- 예약 창 -->
+    <div class="resv-wrapper">
+        <div class="resv-bg">
+            <button class="resv-close">X</button>
+            <div class="resv_info">
+                <div class="resv_ym">
+                    <span class="resv-year">2021</span>-
+                    <span class="resv-month">05</span>-
+                    <span class="resv-day">11</span>
+                </div>
+                <div class="resv-remain">
+                    <span> </span>
+                </div>
+                <h3>
+                    Name
+                </h3>
+                <div class="resv-list">
+
+                </div>
+                <h3>
+                    Program
+                </h3>
+                <div class="resv-event">
+
+                </div>
+            </div>
+            <form class="resv_set" method="post">
+
+                <input class="resv_set time" type="time" name="time" id="onlytime" onchange="dateChange(this)">
+                <div>
+                    <input class="resv_title" type="text" placeholder="title" name="resv_title">
+                </div>
+                <div>
+                    <input class="resv_body" type="text" placeholder="body" name="resv_body">
+                </div>
+                <input type="hidden" id="onlydatetime" name="onlydatetime">
+                <input class="resv_btn purchase" type="submit" value="submit">
+
+            </form>
+        </div>
+    </div>
+
+</div>
+<script src="{% static 'js/calendar/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/calendar/calendar.js' %}"></script>
+<script src="{% static 'js/calendar/reserve.js' %}"></script>
+<script type="text/javascript">
+    /*
+    $(document).ready(function(){
+
+
+    });
+    */
+    function ListCal(){
+
+        var onlydatetime = $("#onlydatetime").val();
+        var parent = $(".resv-event");
+        var parentTitle = $(".resv-list");
+        parent.empty();
+        parentTitle.empty();
+        //var event = $(".event-itm");
+        //event.empty();
+      
+        var data = onlydatetime;
+        $.ajax({
+            type: "POST",    // GET 또는 POST
+            url: "/resv_list/",    // 데이터를 요청할 API, url
+            data: JSON.stringify(data),
+            success: function (res) {
+                var resv_list = res['resv_list'];
+                if(resv_list.length > 0) {
+                    resv_list.forEach(function(e) {
+                        parent.empty();
+                        parentTitle.empty();
+                        //event.empty();
+                        var child  = '<p>'+ e['body'] + '</p>';
+                        var childTitle = '<h1>' + e['title'] + '</h1>'
+                        parent.append(child);
+                        parentTitle.append(childTitle);
+                        
+                        //event.append(childTitle);
+                    })
+                } else {
+                    var child  = 'No schedule.';
+                    parent.append(child);
+                    var childTitle = '<h1>No title.</h1>';
+                    parentTitle.append(childTitle);
+                }
+            }
+        })
+        {% for cal in cal_list %}
+            /*
+            var date = "{{ cal.event_date|date:'Y-m-d H:i' }}" ;
+            if( date.includes(onlydatetime)){
+                var child  = '<p>body : ' + "{{ cal.body }}" + ', title : ' + "{{ cal.title }}</p>";
+                parent.append(child);
+            }
+            */
+        {% endfor %}
+        /*
+        if(!parent.has('p').length){
+            var child  = '등록된 예약정보가 없습니다.';
+            parent.append(child);
+        }
+        */
+    }
+
+    function dateChange(tag){
+        document.getElementById("onlydatetime").value += ' ' + tag.value;
+        //document.getElementById("onlydatetime").value = new Date($("#onlydatetime"));
+    }
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{csrf_token}}' }
+    });
+</script>

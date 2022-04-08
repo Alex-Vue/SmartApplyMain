@@ -1,0 +1,27 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Fantasy;
+    background-size: cover;
+    background: url(glenn-carstens-peters-npxXWgQ33ZQ-unsplash.jpg) center;
+}
+
+.initial-page{
+    width: 600px;
+    box-shadow: 0 0 40px 0 rgb(85, 103, 22);
+    background: #5a7950;
+    padding: 30px;
+    margin: 5% auto 0;
+
+    text-align: center;
+}
+
+.initial-page h1{
+    color: #032603;
+    margin-bottom: 15px;
+}
+
+.initial-page h1{
+    color: #032603;
+    margin-bottom: 15px;
+}

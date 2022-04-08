@@ -1,0 +1,41 @@
+{% load static %}
+<html>
+<head>
+    <title>Sign Up Form
+    </title>
+    <link rel="stylesheet" href="{% static 'css/users/signUp.css' %}">
+</head>
+
+<body>
+<div class="sign-up">
+ <h1> Sign Up Now </h1>
+
+
+<form action="" method="post" style="display:flex;flex-direction:column;gap:32px;">
+   <p> First Name: </p>
+    <input name="firstname" type="text" placeholder="Enter First Name">
+    <p> Last Name: </p>
+    <input name="lastname" type="text" placeholder="Enter Last Name">
+    <p> Username: </p>
+    <input name="username" type="text" placeholder="Enter Username">
+   <p> Password: </p>
+    <input name="password" type="password" placeholder="Enter Password">
+    <p><span><input type="checkbox"></span> I agree to the terms of service</p>
+<input type="submit" value="Sign Up!">
+    <p class="or">OR</p>
+</form>
+    <p> Do you already have an account? <a href="/sign-in/">Sign in</a></p>
+    </div>
+</body>
+</html>
+
+
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}<br>
+<br>
